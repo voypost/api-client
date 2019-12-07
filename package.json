@@ -1,13 +1,13 @@
 {
   "name": "@voypost/rest-api-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Voypost API Client",
   "repository": "git@github.com:voypost/api-client.git",
   "author": "Nikita Sviridenko <nikita.sviridenko@voypost.com>",
   "license": "UNLICENSED",
   "main": "index.js",
   "engines": {
-    "node": ">=12"
+    "node": ">=10"
   },
   "scripts": {
     "build": "rm -rf lib && babel src --out-dir lib --ignore '**/*.test.js,**/__mocks__'",
