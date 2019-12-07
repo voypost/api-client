@@ -5,7 +5,7 @@
   "repository": "git@github.com:voypost/api-client.git",
   "author": "Nikita Sviridenko <nikita.sviridenko@voypost.com>",
   "license": "UNLICENSED",
-  "main": "index.js",
+  "main": "lib/index.js",
   "engines": {
     "node": ">=10"
   },
