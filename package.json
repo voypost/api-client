@@ -1,5 +1,5 @@
 {
-  "name": "@voypost/api-client",
+  "name": "@voypost/rest-api-client",
   "version": "0.1.0",
   "description": "Voypost API Client",
   "repository": "git@github.com:voypost/api-client.git",

@@ -3,7 +3,7 @@
 ## Getting started
 
 ```js
-import { createApiClient } from '@voypost/api-client';
+import { createApiClient } from '@voypost/rest-api-client';
 
 export default createApiClient({
   clientId: 'xxx',
