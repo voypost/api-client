@@ -1,6 +1,6 @@
 {
   "name": "@voypost/rest-api-client",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Voypost API Client",
   "repository": "git@github.com:voypost/api-client.git",
   "author": "Nikita Sviridenko <nikita.sviridenko@voypost.com>",
