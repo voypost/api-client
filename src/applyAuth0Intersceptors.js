@@ -1,6 +1,7 @@
 import qs from 'qs';
+import axios from 'axios';
 
-export default function applyAuth0Intersceptors(axios, {
+export default function applyAuth0Intersceptors(axiosInstance, {
   clientId,
   clientSecret,
   audience,
@@ -8,9 +9,14 @@ export default function applyAuth0Intersceptors(axios, {
   tokenBaseUrl,
   localStorageService,
 }) {
+  const tokenBaseUrlSafe = tokenBaseUrl.indexOf('/', tokenBaseUrl.length - 1) !== -1
+    ? tokenBaseUrl.substr(0, tokenBaseUrl.length - 1)
+    : tokenBaseUrl;
+  const tokenUrl = `${tokenBaseUrlSafe}/oauth/token`;
+
   async function refreshAccessToken() {
     const res = await axios({
-      url: `${tokenBaseUrl}/oauth/token`,
+      url: tokenUrl,
       method: 'post',
       headers: {
         'content-type': 'application/x-www-form-urlencoded',
@@ -47,9 +53,9 @@ export default function applyAuth0Intersceptors(axios, {
     }
   }
 
-  axios.interceptors.request.use(
+  axiosInstance.interceptors.request.use(
     async config => {
-      if (config.url === `${tokenBaseUrl}/oauth/token`) {
+      if (config.url === tokenUrl) {
         return config;
       }
 
@@ -65,13 +71,13 @@ export default function applyAuth0Intersceptors(axios, {
     },
   );
 
-  axios.interceptors.response.use(
+  axiosInstance.interceptors.response.use(
     response => response,
     async (error) => {
       const originalRequest = error.config;
 
       if (error.response && error.response.status === 401 && originalRequest.url ===
-        `${tokenBaseUrl}/oauth/token`) {
+        tokenUrl) {
         throw error;
       }
 
@@ -80,7 +86,7 @@ export default function applyAuth0Intersceptors(axios, {
 
           // const refreshToken = localStorageService.getRefreshToken();
           // const res = await axios({
-          //   url: `${tokenBaseUrl}/oauth/token`,
+          //   url: tokenUrl,
           //   method: 'post',
           //   headers: {
           //     'content-type': 'application/x-www-form-urlencoded',
@@ -98,8 +104,8 @@ export default function applyAuth0Intersceptors(axios, {
           // localStorageService.setAccessToken(accessToken);
 
           await ensureAccessToken();
-          axios.defaults.headers.common['Authorization'] = `Bearer ${localStorageService.getAccessToken()}`;
-          return axios(originalRequest);
+          axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${localStorageService.getAccessToken()}`;
+          return axiosInstance(originalRequest);
       }
       throw error;
     },
