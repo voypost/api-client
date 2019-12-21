@@ -82,30 +82,29 @@ export default function applyAuth0Intersceptors(axiosInstance, {
       }
 
       if (error.response && error.response.status === 401 && !originalRequest._retry) {
-          originalRequest._retry = true;
+        originalRequest._retry = true;
 
-          // const refreshToken = localStorageService.getRefreshToken();
-          // const res = await axios({
-          //   url: tokenUrl,
-          //   method: 'post',
-          //   headers: {
-          //     'content-type': 'application/x-www-form-urlencoded',
-          //   },
-          //   data: {
-          //     grant_type: 'refresh_token',
-          //     client_id: clientId,
-          //     client_secret: clientSecret,
-          //     refresh_token: refreshToken,
-          //   },
-          // });
-          // const {
-          //   access_token: accessToken,
-          // } = res.data;
-          // localStorageService.setAccessToken(accessToken);
+        // const refreshToken = localStorageService.getRefreshToken();
+        // const res = await axios({
+        //   url: tokenUrl,
+        //   method: 'post',
+        //   headers: {
+        //     'content-type': 'application/x-www-form-urlencoded',
+        //   },
+        //   data: {
+        //     grant_type: 'refresh_token',
+        //     client_id: clientId,
+        //     client_secret: clientSecret,
+        //     refresh_token: refreshToken,
+        //   },
+        // });
+        // const {
+        //   access_token: accessToken,
+        // } = res.data;
+        // localStorageService.setAccessToken(accessToken);
 
-          await ensureAccessToken();
-          axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${localStorageService.getAccessToken()}`;
-          return axiosInstance(originalRequest);
+        await refreshAccessTokenOnce();
+        return axiosInstance(originalRequest);
       }
       throw error;
     },
