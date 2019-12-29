@@ -3,6 +3,7 @@ import axiosRetry from 'axios-retry';
 import qs from 'qs';
 import applyAuth0Intersceptors from './applyAuth0Intersceptors';
 import LocalStorageService from './LocalStorageService';
+import applySentryIntersceptors from './applySentryIntersceptors';
 
 export default function createApiClient({
   clientId,
@@ -11,6 +12,7 @@ export default function createApiClient({
   audience,
   tokenBaseUrl,
   scopes,
+  Sentry,
 }) {
   const axiosInstance = axios.create({
     baseURL: baseUrl,
@@ -35,6 +37,10 @@ export default function createApiClient({
     tokenBaseUrl,
     localStorageService,
   });
+
+  if (Sentry) {
+    applySentryIntersceptors(axiosInstance, { Sentry });
+  }
 
   return axiosInstance;
 }
