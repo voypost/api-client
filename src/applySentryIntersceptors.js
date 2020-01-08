@@ -7,7 +7,15 @@ export default function applySentryIntersceptors(axiosInstance, { Sentry }) {
     );
 
     if (isClientError) {
-      Sentry.captureException(error);
+      Sentry.addBreadcrumb({
+        category: 'error',
+        message: 'Axios request error',
+        data: {
+          config: error.config,
+          response: error.response,
+        },
+        level: Sentry.Severity.Error,
+      });
     }
 
     throw error;
