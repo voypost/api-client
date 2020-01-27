@@ -13,6 +13,7 @@ export default function createApiClient({
   tokenBaseUrl,
   scopes,
   Sentry,
+  retryConfig = {},
 }) {
   const axiosInstance = axios.create({
     baseURL: baseUrl,
@@ -27,6 +28,7 @@ export default function createApiClient({
     retryCondition: (error) => {
       return axiosRetry.isNetworkOrIdempotentRequestError(error) || error.code === 'ENOTFOUND';
     },
+    ...retryConfig,
   });
 
   const localStorageService = new LocalStorageService();
