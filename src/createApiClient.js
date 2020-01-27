@@ -23,6 +23,7 @@ export default function createApiClient({
 
   axiosRetry(axiosInstance, {
     retries: 3,
+    retryDelay: axiosRetry.exponentialDelay,
     retryCondition: (error) => {
       return axiosRetry.isNetworkOrIdempotentRequestError(error) || error.code === 'ENOTFOUND';
     },
